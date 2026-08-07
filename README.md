@@ -49,7 +49,6 @@ coupling0729/          the framework
 coupling_sim/          the two layer simulators and the Sioux Falls road network
 examples/              experiment runners and plotting scripts
 tests/                 design-invariant tests
-hpc/                   SGE array-job scripts for the cluster runs
 data/net3/Net3.inp     the EPANET network used by the water case
 results/               stored output of every experiment
 ```
@@ -138,21 +137,34 @@ cannot absorb restoration-coupling effects. Time to recovery is anchored at
 and how fast it then proceeds; anchoring at the observed onset of recovery would
 subtract out precisely the delay that restoration coupling causes.
 
-## Running on a cluster
+## Running the large experiments
 
-`hpc/` contains the SGE array-job scripts used for the large runs. The work is
-embarrassingly parallel across replication blocks, so each task takes a single
-slot and the array length is the number of blocks.
+The work is embarrassingly parallel: replications are independent, and so are
+the cells of a design grid. Every runner therefore splits into independent
+processes that each write their own block file, followed by a merge step. Use
+one process per core, or one task per job on a scheduler.
 
-Cluster paths in these scripts are placeholders. Either edit the SGE directives
-at the top of each jobscript, or supply them at submission time:
+The factorial runners split by replication block:
 
 ```bash
-qsub -wd <project> -o <logdir> -e <logdir> -N c1 -t 1-50 -v SGE_ARRAY_N=50 hpc/array_job.sh examples/run_case1_factorial.py --replications 1000 --outdir results/case1_n1000
+python examples/run_case1_factorial.py --replications 1000 --block 0 --n-blocks 50 --outdir results/case1_n1000
 ```
 
-Shell paths inside the scripts read `PROJECT_ROOT`, `PYLIBS` and `LOGDIR` from
-the environment, falling back to defaults under `$HOME`.
+The sweep runners split by design cell:
+
+```bash
+python examples/run_rho_sweep.py --case 1 --task 0 --n-tasks 200
+```
+
+Either way, combine the parts once every process has finished:
+
+```bash
+python examples/run_case1_factorial.py --replications 1000 --merge --outdir results/case1_n1000
+```
+
+Each process is single-threaded by design. Set `OMP_NUM_THREADS=1` and
+`OPENBLAS_NUM_THREADS=1` before launching many of them, or the BLAS thread pools
+will oversubscribe the machine and run slower than one process would.
 
 ## License
 

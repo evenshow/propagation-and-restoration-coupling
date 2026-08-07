@@ -17,7 +17,11 @@ The grid contains ``q = 0.5, kappa = 0.8`` so that one of its cells reproduces
 the headline number and the sweep can be checked against a result computed by a
 different runner at a different sample size.
 
-    qsub -N rho1 -t 1-200 -v SGE_ARRAY_N=200 hpc/rho_array.sh --case 1
+The grid is split into independent tasks so it can be run in parallel; each
+writes its own block file and ``--merge`` combines them.
+
+    python examples/run_rho_sweep.py --case 1 --task 0 --n-tasks 200
+    python examples/run_rho_sweep.py --case 1 --merge
 """
 
 from __future__ import annotations

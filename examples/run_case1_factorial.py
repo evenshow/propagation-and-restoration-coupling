@@ -2,12 +2,12 @@
 
 Block/merge execution, matching case 2: each block is the sequential path over a
 disjoint set of replications, so it is restartable, individually inspectable and
-maps one-to-one onto an SGE array task.
+maps one-to-one onto a task on any scheduler.
 
     for i in 0 1 2 3 4 5; do
-      python coupling0729/examples/run_case1_factorial.py --replications 30 --block $i --n-blocks 6 &
+      python examples/run_case1_factorial.py --replications 30 --block $i --n-blocks 6 &
     done
-    python coupling0729/examples/run_case1_factorial.py --replications 30 --merge
+    python examples/run_case1_factorial.py --replications 30 --merge
 """
 
 from __future__ import annotations
