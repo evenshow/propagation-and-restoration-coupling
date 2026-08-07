@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Run output that is not an input to anything: captured stdout carries local
+# absolute paths, and merged block files are rebuilt by the --merge step.
+*.log
+results/**/blocks/
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Manuscript files are not part of the code release.
+*.docx
+*.pdf

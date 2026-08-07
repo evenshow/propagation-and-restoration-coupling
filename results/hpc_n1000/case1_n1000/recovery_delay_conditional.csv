@@ -1,0 +1,4 @@
+channel,n,n_censored,mean,median
+propagation coupling,1000,0,2.0,0.0
+restoration coupling,1000,0,125.76,100.0
+interaction,441,559,20.77097505668934,20.0

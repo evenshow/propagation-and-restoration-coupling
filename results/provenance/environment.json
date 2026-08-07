@@ -1,0 +1,12 @@
+{
+  "matplotlib": "3.5.1",
+  "networkx": "2.6.3",
+  "node": "login13.myriad.ucl.ac.uk",
+  "numpy": "1.21.5",
+  "pandapower": "2.13.1",
+  "pandas": "1.4.0",
+  "platform": "Linux-3.10.0-1160.119.1.el7.x86_64-x86_64-with-glibc2.17",
+  "python": "3.9.10",
+  "scipy": "1.8.0",
+  "wntr": "1.0.0"
+}

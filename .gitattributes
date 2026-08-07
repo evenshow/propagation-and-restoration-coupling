@@ -1,0 +1,16 @@
+# Normalise text to LF inside the repository.
+* text=auto
+
+# Cluster jobscripts must keep LF endings: a CRLF shebang makes Linux report
+# "bad interpreter" and the job dies before it starts.
+*.sh text eol=lf
+
+# PowerShell is run from Windows, where CRLF is the native convention.
+*.ps1 text eol=crlf
+
+# Input data is parsed line by line; keep it LF everywhere.
+*.inp text eol=lf
+*.tntp text eol=lf
+
+# Never transform binaries.
+*.png binary

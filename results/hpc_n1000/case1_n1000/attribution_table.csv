@@ -1,0 +1,5 @@
+metric,propagation coupling,restoration coupling,interaction,total (11 - 00)
+1 - R  (overall resilience loss),0.010998022711155556,0.013245074788522071,0.08098140939104265,0.10522450689072026
+Lambda  (depth of drop),0.047117413401768206,0.0,0.0,0.047117413401768206
+T_rec  (recovery delay)  [n differs — not additive],2.0,125.76,20.77097505668934,88.54875283446712
+lock-in  (never recovers in horizon),0.0,0.0,0.559,0.559

@@ -1,0 +1,14 @@
+# The environment that produced the reported results (UCL Myriad, Linux,
+# Python 3.9.10). Versions are pinned rather than bounded because pandapower and
+# WNTR both changed solver defaults between minor releases, and the reported
+# numbers are reproducible only against these.
+numpy==1.21.5
+scipy==1.8.0
+pandas==1.4.0
+networkx==2.6.3
+pandapower==2.13.1
+wntr==1.0.0
+matplotlib==3.5.1
+
+# Testing only.
+pytest==7.0.1

@@ -1,0 +1,3 @@
+metric,expected_channel,off_diagonal_channel,expected_effect,off_diagonal_effect,dominance_ratio
+Lambda,delta_prop,delta_rec,0.047117413401768206,0.0,inf
+T_rec,delta_rec,delta_prop,125.76,2.0,62.88

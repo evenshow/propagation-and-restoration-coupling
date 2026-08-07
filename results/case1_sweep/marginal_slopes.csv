@@ -1,0 +1,7 @@
+kind,held_at,slope
+d/dq at fixed kappa,0.25,0.01921719116872269
+d/dq at fixed kappa,0.6,0.03378869404964031
+d/dq at fixed kappa,1.0,0.040829812544261365
+d/dkappa at fixed q,0.25,0.0187170649466194
+d/dkappa at fixed q,0.6,0.028833653239231392
+d/dkappa at fixed q,1.0,0.040135994383536086
