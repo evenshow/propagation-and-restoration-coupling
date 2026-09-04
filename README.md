@@ -8,7 +8,7 @@ separately under a shared hazard realisation.
 Running the four on/off combinations of the two operators on the same hazard
 draw gives an exact additive decomposition of the coupling-induced resilience
 loss into a propagation contribution, a restoration contribution, and their
-interaction, with no residual for any outcome defined in all four arms.
+joint contribution, with no residual for any outcome defined in all four arms.
 
 Two application cases are included: an IEEE33 distribution feeder and an EPANET
 Net3 water network, each coupled to the Sioux Falls road network under a
@@ -44,7 +44,7 @@ python -m pytest tests -q
 coupling0729/          the framework
   core/                scenario, hazard, damage, coupling operators, repair, engine
   metrics/headline.py  1 - R, Lambda, time to recovery, censoring, lock-in
-  experiments/         factorial arms, attribution, design sweeps, interaction share
+  experiments/         factorial arms, attribution, design sweeps, joint share
   cases/               power-transport, water-transport, and a transparent toy case
 coupling_sim/          the two layer simulators and the Sioux Falls road network
 examples/              experiment runners and plotting scripts
@@ -66,20 +66,40 @@ directory holds a `runs.csv` with one row per replication per arm.
 | directory | design | replications |
 |---|---|---|
 | `hpc_n1000/case{1,2}_n1000` | the baseline design point | 1,000 × 2 cases |
-| `hpc_n1000/case{1,2}_gate_infra_n1000` | repair access reads physical integrity | 1,000 × 2 cases |
+| `hpc_n1000/case{1,2}_gate_infra_n1000` | restoration support read from physical integrity | 1,000 × 2 cases |
 | `hpc_n1000/case{1,2}_rho_sweep` | `q` × `κ`, 5 × 5 | 200 per cell × 2 cases |
 | `case1_gate_grid` | `a_thr` × `κ`, 3 × 6 | 200 per cell |
 | `case1_cross` | `κ_prop` × `κ_rec`, 4 × 4 | 200 per cell |
-| `case1_severity` | flood peak 0.40–0.90 m, 6 levels | 100 per level |
+| `case1_severity` | flood intensity `I_0` 0.40–0.90 m, 6 levels | 100 per level |
 | `case{1,2}_layouts` | 20 independently drawn coupling layouts | 100 each × 2 cases |
-| `case{1,2}_multiT` | one trajectory evaluated at 8 horizons | 300 × 2 cases |
-| `case1_gate_horizon`, `case2_horizon` | evaluation horizon × 5 | 200 × 2 cases |
+| `case{1,2}_multiT` | one trajectory evaluated at 8 assessment windows | 300 × 2 cases |
+| `case1_gate_horizon`, `case2_horizon` | assessment window × 5 | 200 × 2 cases |
 
 Figures are rebuilt from these files without re-simulating:
 
 ```bash
 python examples/plot_attribution.py
 ```
+
+## Terminology
+
+The manuscript settled on different words for some of these quantities after the
+code was written. Identifiers here are unchanged, because renaming them would
+invalidate every stored result, so the mapping is:
+
+| manuscript | in this repository |
+|---|---|
+| joint contribution, `Δ_joint` | `delta_int`, `loss__delta_int`, `mean_delta_int` |
+| joint-contribution share, `ρ_joint` | the `share` column of `rho_int_surface.csv` |
+| isolated propagation contribution, `Δ_prop` | `delta_prop` |
+| isolated restoration contribution, `Δ_rec` | `delta_rec` |
+| assessment window, `T` | `T_eval`, and the `--t-eval` argument |
+| mobilisation duration, `T_mob` | `t_mob` on `HazardWindow` |
+| restoration support | `gate_indicator`, and the `case*_gate_*` directories |
+| flood intensity, `I_0` | the `--flood-peak` argument, and the `peak_*` directories |
+
+The framework's own vocabulary is unchanged: `D_prop` and `D_rec` are still the
+two operators, and the four arms are still `00`, `10`, `01` and `11`.
 
 ## Seed hierarchy
 
@@ -126,12 +146,12 @@ and **rate derating**, in which work proceeds at rate `s_j`.
 ```text
       pre-event        Phase I           Phase II            Phase III
     ------------|----------------|------------------|--------------------->
-               t_oe             t_ee          t_ee + t_mob
+               t_oe             t_ee          t_ee + T_mob
                  damage accrues    embargo: no repair    repair proceeds
 ```
 
 The repair embargo is load-bearing rather than cosmetic. `Lambda` is read over
-`[t_oe, t_ee + t_mob]`, a window containing no repair, so the depth measure
+`[t_oe, t_ee + T_mob]`, a window containing no repair, so the depth measure
 cannot absorb restoration-coupling effects. Time to recovery is anchored at
 `t_ee`, an exogenous instant, so it captures both how long until repair begins
 and how fast it then proceeds; anchoring at the observed onset of recovery would
